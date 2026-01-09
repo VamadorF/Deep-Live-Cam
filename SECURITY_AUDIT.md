@@ -46,11 +46,11 @@ After thorough analysis, **no malicious code was found** in this repository. The
 #### ✅ Legitimate Network Usage:
 All network operations are for downloading legitimate ML models from trusted sources:
 
-1. **Model Downloads** (`modules/utilities.py`):
-   - Uses `urllib.request.urlopen()` and `urllib.request.urlretrieve()`
-   - URLs hardcoded in code:
-     - `https://huggingface.co/hacksider/deep-live-cam/blob/main/inswapper_128_fp16.onnx`
-     - `https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth`
+1. **Model Downloads** (`modules/utilities.py`, `modules/processors/frame/face_swapper.py`, `modules/processors/frame/face_enhancer.py`):
+   - Uses `urllib.request.urlopen()` and `urllib.request.urlretrieve()` in utilities
+   - Model URLs hardcoded in processor files:
+     - `https://huggingface.co/hacksider/deep-live-cam/blob/main/inswapper_128_fp16.onnx` (face_swapper.py)
+     - `https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth` (face_enhancer.py)
    - **Purpose**: Download pre-trained AI models for face swapping and enhancement
    - **Risk Level**: LOW - Known, reputable sources
 
@@ -150,19 +150,32 @@ Standard Python and ML libraries used:
 
 #### ✅ Dependencies from `requirements.txt`:
 ```
+--extra-index-url https://download.pytorch.org/whl/cu128
 numpy>=1.23.5,<2
+typing-extensions>=4.8.0
 opencv-python==4.10.0.84
+cv2_enumerate_cameras==1.1.15
+onnx==1.18.0
 insightface==0.7.3
-torch (PyTorch)
-onnxruntime-gpu==1.22.0
-tensorflow
-opennsfw2==0.10.2
+psutil==5.9.8
+tk==0.1.0
 customtkinter==5.2.2
+pillow==11.1.0
+torch; sys_platform != 'darwin'
+torch==2.8.0+cu128; sys_platform == 'darwin'
+torchvision; sys_platform != 'darwin'
+torchvision==0.20.1; sys_platform == 'darwin'
+onnxruntime-silicon==1.16.3; sys_platform == 'darwin' and platform_machine == 'arm64'
+onnxruntime-gpu==1.22.0; sys_platform != 'darwin'
+tensorflow; sys_platform != 'darwin'
+opennsfw2==0.10.2
+protobuf==4.25.1
 git+https://github.com/xinntao/BasicSR.git@master
 git+https://github.com/TencentARC/GFPGAN.git@master
+pygrabber
 ```
 
-**Assessment**: All dependencies are well-known, legitimate ML and computer vision libraries from trusted sources.
+**Assessment**: All dependencies are well-known, legitimate ML and computer vision libraries from trusted sources. The requirements include platform-specific versions for macOS Darwin and other platforms.
 
 ### 8. Credentials and Secrets
 
